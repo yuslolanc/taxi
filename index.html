@@ -20,8 +20,8 @@
 <h2 style="text-align:center;">🚖 Taxi / Private Hire - Fare Calculator, Based Lancaster Council Tariff Card  </h2>
 <table>
   <tr>
-    <td><strong>Distance (miles)</strong></td>
-    <td><input type="number" id="miles" value="1.1" step="0.1" onchange="calculateFare()"></td>
+    <td><strong>Distance in Miles</strong></td>
+    <td><input type="number" id="miles" value="1" step="0.1" onchange="calculateFare()"></td>
   </tr>
   <tr>
     <td><strong>Tariff</strong></td>
@@ -54,7 +54,7 @@
     <td id="totalFare"></td>
   </tr>
 </table>
-
+<h4 style="text-align:center;"> Note: This Total doesn't include luggage (20p) charge or sitting in traffic (20p each 40 secs) </h4>
 <script>
   function calculateFare() {
     const miles = parseFloat(document.getElementById("miles").value) || 0;
