@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Taxi Fare Calculator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon-192.png" type="image/png">
+  <meta name="theme-color" content="#ffffff">
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background-color: #f9f9f9; }
+    table { border-collapse: collapse; width: 100%; max-width: 600px; margin: auto; background-color: white; }
+    th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+    th { background-color: #f2f2f2; }
+    input, select { width: 100%; padding: 5px; }
+    .total { background-color: #e0ffe0; font-weight: bold; }
+  </style>
+</head>
+<body>
+<h2 style="text-align:center;">🚖 Taxi Fare Calculator</h2>
+<table>
+  <tr>
+    <td><strong>Distance (miles)</strong></td>
+    <td><input type="number" id="miles" value="1.1" step="0.1" onchange="calculateFare()"></td>
+  </tr>
+  <tr>
+    <td><strong>Tariff</strong></td>
+    <td>
+      <select id="tariff" onchange="calculateFare()">
+        <option value="1">Tariff 1 – Day</option>
+        <option value="2">Tariff 2 – Night/Bank Holiday</option>
+        <option value="3">Tariff 3 – Xmas/New Year</option>
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Distance in Yards</strong></td>
+    <td id="yards"></td>
+  </tr>
+  <tr>
+    <td><strong>Base Fare (£)</strong></td>
+    <td id="baseFare"></td>
+  </tr>
+  <tr>
+    <td><strong>Excess Distance (yards)</strong></td>
+    <td id="excessYards"></td>
+  </tr>
+  <tr>
+    <td><strong>Fare for Excess Distance (£)</strong></td>
+    <td id="excessFare"></td>
+  </tr>
+  <tr class="total">
+    <td><strong>Total Fare (£)</strong></td>
+    <td id="totalFare"></td>
+  </tr>
+</table>
+
+<script>
+  function calculateFare() {
+    const miles = parseFloat(document.getElementById("miles").value) || 0;
+    const tariff = parseInt(document.getElementById("tariff").value);
+    const baseYards = 880;
+    const distanceYards = miles * 1760;
+    let baseFare, extraRate;
+    if (tariff === 1) { baseFare = 3.2; extraRate = 0.2; }
+    else if (tariff === 2) { baseFare = 4.8; extraRate = 0.3; }
+    else { baseFare = 6.4; extraRate = 0.4; }
+    const excessYards = Math.max(0, distanceYards - baseYards);
+    const excessUnits = Math.floor(excessYards / 160);
+    const extraFare = excessUnits * extraRate;
+    const total = (baseFare + extraFare).toFixed(2);
+    document.getElementById("yards").textContent = distanceYards.toFixed(0);
+    document.getElementById("baseFare").textContent = "£" + baseFare.toFixed(2);
+    document.getElementById("excessYards").textContent = excessYards.toFixed(0);
+    document.getElementById("excessFare").textContent = "£" + extraFare.toFixed(2);
+    document.getElementById("totalFare").textContent = "£" + total;
+  }
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js');
+  }
+  window.addEventListener('load', calculateFare);
+</script>
+</body>
+</html>
